@@ -1,14 +1,14 @@
 import React from 'react';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {useSelector} from 'react-redux';
 
 // Screen Components
-import AddTodoScreen from './screens/AddTodoScreen';
-import HomeScreen from './screens/HomeScreen';
-import SettingsScreen from './screens/SettingsScreen';
-import MyTabBar from './screens/tab/MyTabBar';
+import AddTodoScreen from '../screens/AddTodoScreen';
+import HomeScreen from '../screens/HomeScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import LoginScreen from '../screens/LoginScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +18,9 @@ const addTodoName = 'Add Todo';
 const settingName = 'Settings';
 
 const MainContainer = () => {
-  return (
+  const user = useSelector(state => state?.user?.name);
+
+  return user ? (
     <NavigationContainer>
       <Tab.Navigator
         initialRouteName={homeName}
@@ -42,36 +44,27 @@ const MainContainer = () => {
           tabBarStyle: {height: 65},
           tabBarItemStyle: {paddingVertical: 12},
           tabBarHideOnKeyboard: true,
-        })}
-        tabBar={props => <MyTabBar {...props} />}>
-        <Tab.Screen name={homeName} component={HomeScreen} options={{}} />
-        <Tab.Screen name={addTodoName} component={AddTodoScreen} options={{}} />
+        })}>
+        <Tab.Screen
+          name={homeName}
+          component={HomeScreen}
+          options={{headerTitle: `Hello ${user}`}}
+        />
+        <Tab.Screen
+          name={addTodoName}
+          component={AddTodoScreen}
+          options={{headerTitle: 'Add New Todo'}}
+        />
         <Tab.Screen
           name={settingName}
           component={SettingsScreen}
-          options={{}}
+          options={{headerTitle: 'Change Theme'}}
         />
       </Tab.Navigator>
     </NavigationContainer>
+  ) : (
+    <LoginScreen />
   );
 };
 
 export default MainContainer;
-
-// StyleSheet
-EStyleSheet.build({
-  $text: '#1a1a1a',
-  $bgColor: '#dedede',
-});
-
-export const styles = EStyleSheet.create({
-  container: {
-    backgroundColor: '$bgColor',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: '$text',
-  },
-});

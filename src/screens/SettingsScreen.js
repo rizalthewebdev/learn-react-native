@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {SafeAreaView, Text} from 'react-native';
-import {styles} from '../MainContainer';
+import {styles} from '../styles/global';
 
 const SettingsScreen = ({navigation}) => {
   return (
