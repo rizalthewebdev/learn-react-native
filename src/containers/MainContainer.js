@@ -2,13 +2,14 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {useSelector} from 'react-redux';
+import {TouchableOpacity, Text} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import tw from '../lib/tailwind';
+
+import {logout} from '../app/features/user';
 
 // Screen Components
-import AddTodoScreen from '../screens/AddTodoScreen';
-import HomeScreen from '../screens/HomeScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import LoginScreen from '../screens/LoginScreen';
+import {AddTodo, Home, Login, Setting} from '../screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,6 +20,7 @@ const settingName = 'Settings';
 
 const MainContainer = () => {
   const user = useSelector(state => state?.user?.name);
+  const dispatch = useDispatch();
 
   return user ? (
     <NavigationContainer>
@@ -47,23 +49,33 @@ const MainContainer = () => {
         })}>
         <Tab.Screen
           name={homeName}
-          component={HomeScreen}
-          options={{headerTitle: `Hello ${user}`}}
+          component={Home}
+          options={{
+            headerTitle: `Hello ${user}`,
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => dispatch(logout())}
+                style={tw`flex flex-row items-center justify-center mr-4 py-1 px-3 bg-red-200/40 rounded-lg`}>
+                <Icon name="log-out-outline" size={25} color="red" />
+                <Text style={tw`text-red-500 pl-1`}>Logout</Text>
+              </TouchableOpacity>
+            ),
+          }}
         />
         <Tab.Screen
           name={addTodoName}
-          component={AddTodoScreen}
-          options={{headerTitle: 'Add New Todo'}}
+          component={AddTodo}
+          options={{headerTitle: 'Add New Todo', headerTitleAlign: 'center'}}
         />
         <Tab.Screen
           name={settingName}
-          component={SettingsScreen}
-          options={{headerTitle: 'Change Theme'}}
+          component={Setting}
+          options={{headerTitle: 'Change Theme', headerTitleAlign: 'center'}}
         />
       </Tab.Navigator>
     </NavigationContainer>
   ) : (
-    <LoginScreen />
+    <Login />
   );
 };
 

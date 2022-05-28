@@ -1,18 +1,34 @@
 import * as React from 'react';
-import {SafeAreaView, Button} from 'react-native';
-import {styles} from '../styles/global';
-import {useDispatch} from 'react-redux';
-import {login} from '../app/features/user';
+import {Text, TouchableOpacity, View} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {useSelector} from 'react-redux';
+
+import ScreenContainer from '../containers/ScreenContainer';
+
+import tw from '../lib/tailwind';
 
 const HomeScreen = ({navigation}) => {
-  const dispatch = useDispatch();
+  const allTodos = useSelector(state => state.todos);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Button
-        title="Add Name"
-        onPress={() => dispatch(login('Khoerul Rizal'))}
-      />
-    </SafeAreaView>
+    <ScreenContainer>
+      {allTodos.length ? (
+        <>
+          {allTodos.map(todo => (
+            <View key={todo.id}>
+              <Text>{todo.text}</Text>
+            </View>
+          ))}
+        </>
+      ) : (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Add Todo')}
+          style={tw`items-center justify-center`}>
+          <Icon name="add-circle" size={50} color="gray" />
+          <Text>Add new Todo</Text>
+        </TouchableOpacity>
+      )}
+    </ScreenContainer>
   );
 };
 
