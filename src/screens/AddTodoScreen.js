@@ -34,6 +34,7 @@ const AddTodoScreen = ({navigation}) => {
           style={tw`w-1/2 border-b-2 border-gray-300 py-1.5`}
           value={newTodo}
           onChangeText={setNewTodo}
+          placeholderTextColor="gray"
         />
         <TouchableOpacity
           onPress={addTodoPress}

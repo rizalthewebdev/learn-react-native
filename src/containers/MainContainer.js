@@ -2,11 +2,9 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {TouchableOpacity, Text} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import {TouchableOpacity, Button} from 'react-native';
+import {useSelector} from 'react-redux';
 import tw from '../lib/tailwind';
-
-import {logout} from '../app/features/user';
 
 // Screen Components
 import {AddTodo, Home, Login, Setting} from '../screens';
@@ -18,9 +16,8 @@ const homeName = 'Home';
 const addTodoName = 'Add Todo';
 const settingName = 'Settings';
 
-const MainContainer = () => {
+const MainContainer = ({colorScheme, toggleColorScheme, setColorScheme}) => {
   const user = useSelector(state => state?.user?.name);
-  const dispatch = useDispatch();
 
   return user ? (
     <NavigationContainer>
@@ -43,35 +40,25 @@ const MainContainer = () => {
           },
           tabBarActiveTintColor: 'red',
           tabBarInactiveTintColor: 'gray',
-          tabBarStyle: {height: 65},
+          tabBarStyle: tw`h-[65px] bg-white dark:bg-zinc-800`,
           tabBarItemStyle: {paddingVertical: 12},
-          tabBarHideOnKeyboard: true,
+          headerStyle: tw`bg-white dark:bg-zinc-800`,
+          headerTitleStyle: tw`text-zinc-900 dark:text-gray-100`,
+          headerRight: () => (
+            <TouchableOpacity>
+              <Button title="Change Theme" onPress={toggleColorScheme} />
+            </TouchableOpacity>
+          ),
         })}>
         <Tab.Screen
           name={homeName}
           component={Home}
           options={{
             headerTitle: `Hello ${user}`,
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => dispatch(logout())}
-                style={tw`flex flex-row items-center justify-center mr-4 py-1 px-3 bg-red-200/40 rounded-lg`}>
-                <Icon name="log-out-outline" size={25} color="red" />
-                <Text style={tw`text-red-500 pl-1`}>Logout</Text>
-              </TouchableOpacity>
-            ),
           }}
         />
-        <Tab.Screen
-          name={addTodoName}
-          component={AddTodo}
-          options={{headerTitle: 'Add New Todo', headerTitleAlign: 'center'}}
-        />
-        <Tab.Screen
-          name={settingName}
-          component={Setting}
-          options={{headerTitle: 'Change Theme', headerTitleAlign: 'center'}}
-        />
+        <Tab.Screen name={addTodoName} component={AddTodo} />
+        <Tab.Screen name={settingName} component={Setting} />
       </Tab.Navigator>
     </NavigationContainer>
   ) : (

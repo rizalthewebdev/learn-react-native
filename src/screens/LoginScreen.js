@@ -26,14 +26,19 @@ const LoginScreen = ({navigation}) => {
 
   return (
     <ScreenContainer>
-      <Text style={tw`text-2xl font-medium`}>Login</Text>
+      <Text style={tw`text-2xl font-medium dark:text-zinc-200`}>Login</Text>
       <View style={tw`w-1/2 items-center justify-center flex-row my-5`}>
-        <Icon name="person-circle-outline" size={30} style={tw`mr-1`} />
+        <Icon
+          name="person-circle-outline"
+          size={30}
+          style={tw`mr-1 dark:text-zinc-200`}
+        />
         <TextInput
           placeholder="Your name"
-          style={tw`w-full border-b border-gray-300`}
+          style={tw`w-full border-b border-gray-300 dark:text-zinc-200`}
           value={inputValue}
           onChangeText={setInputValue}
+          placeholderTextColor="gray"
         />
       </View>
       <TouchableOpacity>
